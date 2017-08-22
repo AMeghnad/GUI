@@ -22,6 +22,7 @@ public class GUI_Manager : MonoBehaviour
     public KeyCode holdingKey;
     public Text forwardText, backwardText, leftText, rightText, jumpText, crouchText, interactText, sprintText;
     public Toggle fullScreen;
+    public Dropdown resolution;
 
     // Initialisation
     void Start()
@@ -87,6 +88,7 @@ public class GUI_Manager : MonoBehaviour
                 Debug.Log("EDIT LIGHT");
             }
         }
+        ChangeResolution();
     }
     void OnGUI()
     {
@@ -369,6 +371,40 @@ public class GUI_Manager : MonoBehaviour
     public void ScreenToggle()
     {
         Screen.fullScreen = !Screen.fullScreen;
+    }
+
+    public void ChangeResolution()
+    {
+        // Case values correspond to dropdown values, with case 0 corresponding to the first option on the menu
+        switch (resolution.value)
+        {
+            // set first resolution on menu
+            case 0:
+                Screen.SetResolution(640, 480, fullScreen.isOn);
+                break;
+            // set second resolution on menu etc.
+            case 1:
+                Screen.SetResolution(1024, 576, fullScreen.isOn);
+                break;
+            case 2:
+                Screen.SetResolution(1280, 720, fullScreen.isOn);
+                break;
+            case 3:
+                Screen.SetResolution(1600, 900, fullScreen.isOn);
+                break;
+            case 4:
+                Screen.SetResolution(1920, 1080, fullScreen.isOn);
+                break;
+            case 5:
+                Screen.SetResolution(2560, 1440, fullScreen.isOn);
+                break;
+            case 6:
+                Screen.SetResolution(3840, 2160, fullScreen.isOn);
+                break;
+            case 7:
+                Screen.SetResolution(7680, 4800, fullScreen.isOn);
+                break;
+        }
     }
 
     #region Controls
