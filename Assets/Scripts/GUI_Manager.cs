@@ -21,7 +21,11 @@ public class GUI_Manager : MonoBehaviour
     public KeyCode sprint;
     public KeyCode holdingKey;
     public Text forwardText, backwardText, leftText, rightText, jumpText, crouchText, interactText, sprintText;
-    public Toggle fullScreen;
+    public bool fullScreen;
+    public Toggle fullScreenToggle;
+    [Header("Resolutions")]
+    public int index;
+    public int[] resX, resY;
     public Dropdown resolution;
 
     // Initialisation
@@ -62,6 +66,23 @@ public class GUI_Manager : MonoBehaviour
         sprintText.text = sprint.ToString();
         interactText.text = interact.ToString();
         #endregion
+
+        #region Resolution
+        index = PlayerPrefs.GetInt("Res", 3);
+        int fullWindow = PlayerPrefs.GetInt("FullWindow", 1);
+        if(fullWindow == 0)
+        {
+            fullScreen = false;
+            fullScreenToggle.isOn = false;
+        }
+        else
+        {
+            fullScreen = true;
+            fullScreenToggle.isOn = true;
+        }
+        resolution.value = index;
+        Screen.SetResolution(resX[index], resY[index], fullScreen);
+        #endregion
     }
     // Update refreshes multiple times a second
     void Update()
@@ -87,8 +108,7 @@ public class GUI_Manager : MonoBehaviour
                 brightness.intensity = brightnessSlider.value;
                 Debug.Log("EDIT LIGHT");
             }
-        }
-        ChangeResolution();
+        }     
     }
     void OnGUI()
     {
@@ -354,15 +374,17 @@ public class GUI_Manager : MonoBehaviour
 
     public bool FullScreenToggle()
     {
-        if (fullScreen.isOn) // if full screen is on
+        if (fullScreen) // if full screen is on
         {
-            fullScreen.isOn = false;
+            fullScreenToggle.isOn = false;
+            fullScreen = false;
             Screen.fullScreen = false;
             return false; // set it to false
         }
         else
         {
-            fullScreen.isOn = true;
+            fullScreenToggle.isOn = true;
+            fullScreen = true;
             Screen.fullScreen = true;
             return true; // set it to true
         }
@@ -373,38 +395,10 @@ public class GUI_Manager : MonoBehaviour
         Screen.fullScreen = !Screen.fullScreen;
     }
 
-    public void ChangeResolution()
+  public void ResolutionChange()
     {
-        // Case values correspond to dropdown values, with case 0 corresponding to the first option on the menu
-        switch (resolution.value)
-        {
-            // set first resolution on menu
-            case 0:
-                Screen.SetResolution(640, 480, fullScreen.isOn);
-                break;
-            // set second resolution on menu etc.
-            case 1:
-                Screen.SetResolution(1024, 576, fullScreen.isOn);
-                break;
-            case 2:
-                Screen.SetResolution(1280, 720, fullScreen.isOn);
-                break;
-            case 3:
-                Screen.SetResolution(1600, 900, fullScreen.isOn);
-                break;
-            case 4:
-                Screen.SetResolution(1920, 1080, fullScreen.isOn);
-                break;
-            case 5:
-                Screen.SetResolution(2560, 1440, fullScreen.isOn);
-                break;
-            case 6:
-                Screen.SetResolution(3840, 2160, fullScreen.isOn);
-                break;
-            case 7:
-                Screen.SetResolution(7680, 4800, fullScreen.isOn);
-                break;
-        }
+        index = resolution.value;
+        Screen.SetResolution(resX[index], resY[index], fullScreenToggle);
     }
 
     #region Controls
@@ -530,12 +524,12 @@ public class GUI_Manager : MonoBehaviour
 
 
  RESOLUTIONS 16:9
- 640*480
- 1024*576
- 1280*720
- 1600*900
- 1920*1080
- 2560*1440
- 3840*2160
- 7680*4800
+ 640  480
+ 1024 576
+ 1280 720
+ 1600 900
+ 1920 1080
+ 2560 1440
+ 3840 2160
+ 7680 4800
      */
