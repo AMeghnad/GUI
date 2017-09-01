@@ -23,10 +23,10 @@ public class GUI_Manager : MonoBehaviour
     public Text forwardText, backwardText, leftText, rightText, jumpText, crouchText, interactText, sprintText;
     public bool fullScreen;
     public Toggle fullScreenToggle;
+    public Dropdown resolution;
     [Header("Resolutions")]
     public int index;
     public int[] resX, resY;
-    public Dropdown resolution;
 
     // Initialisation
     void Start()
