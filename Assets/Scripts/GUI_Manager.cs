@@ -21,16 +21,18 @@ public class GUI_Manager : MonoBehaviour
     public KeyCode sprint;
     public KeyCode holdingKey;
     public Text forwardText, backwardText, leftText, rightText, jumpText, crouchText, interactText, sprintText;
-    public bool fullScreen;
+    public bool fullScreen, pause, gameScene;
     public Toggle fullScreenToggle;
     public Dropdown resolution;
     [Header("Resolutions")]
     public int index;
     public int[] resX, resY;
+    public CharacterHandler HUD;   
 
     // Initialisation
     void Start()
     {
+        HUD = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterHandler>();
         // audio source safety check
         if (mainMusic != null && volumeSlider != null)
         {
@@ -108,7 +110,15 @@ public class GUI_Manager : MonoBehaviour
                 brightness.intensity = brightnessSlider.value;
                 Debug.Log("EDIT LIGHT");
             }
-        }     
+        }
+        if (gameScene)
+        {
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                TogglePause();                
+            }
+        }
     }
     void OnGUI()
     {
@@ -395,10 +405,50 @@ public class GUI_Manager : MonoBehaviour
         Screen.fullScreen = !Screen.fullScreen;
     }
 
-  public void ResolutionChange()
+    public void ResolutionChange()
     {
         index = resolution.value;
         Screen.SetResolution(resX[index], resY[index], fullScreenToggle);
+    }
+
+    public void Pause()
+    {
+        TogglePause();
+    }
+
+    public bool TogglePause()
+    {
+        if (pause)
+        {
+            if (!showOptions)
+            {
+                Time.timeScale = 1;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                menu.SetActive(false);
+                pause = false;
+                HUD.enabled = true;
+            }
+            else
+            {
+                showOptions = false;
+                options.SetActive(false);
+                menu.SetActive(true);
+            }
+            return false;
+        }
+        else
+        {
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            pause = true;
+            menu.SetActive(true);
+            HUD.enabled = false;
+
+            return true;
+        }
+        
     }
 
     #region Controls

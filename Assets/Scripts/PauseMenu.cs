@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-public class Menu : MonoBehaviour
-{
+
+public class PauseMenu : MonoBehaviour {
+
     [Header("Screen Elements")]
     public bool showOptions;
     public int scrW, scrH;
+    public bool pause;
 
     [Header("Keys")]
     public KeyCode forward;
@@ -31,9 +33,11 @@ public class Menu : MonoBehaviour
     public float volumeSlider, holdingVolume;
     public bool muteToggle;
     public Light brightness;
-    public float brightnessSlider;    
+    public float brightnessSlider;
+    public CharacterHandler HUD;
 
-    void Start()
+    // Use this for initialization
+    void Start ()
     {
         scrW = Screen.width / 16;
         scrH = Screen.height / 9;
@@ -41,10 +45,11 @@ public class Menu : MonoBehaviour
         brightness = GameObject.FindGameObjectWithTag("Sun").GetComponent<Light>();
         mainMusic = GameObject.Find("MenuMusic").GetComponent<AudioSource>();
         volumeSlider = mainMusic.volume;
-        brightnessSlider = brightness.intensity;      
+        brightnessSlider = brightness.intensity;
     }
-
-    void Update()
+	
+	// Update is called once per frame
+	void Update ()
     {
         if (mainMusic != null)
         {
@@ -64,7 +69,7 @@ public class Menu : MonoBehaviour
             {
                 brightness.intensity = brightnessSlider;
             }
-        }        
+        }
     }
 
     void OnGUI()
@@ -74,17 +79,17 @@ public class Menu : MonoBehaviour
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");//background box
             GUI.Box(new Rect(4 * scrW, 0.25f * scrH, 8 * scrW, 2 * scrH), "Jaymies Game Of Awesome");//Title
             //Buttons
-            if (GUI.Button(new Rect(6 * scrW, 4 * scrH, 4 * scrW, scrH), "Play"))
+            if (GUI.Button(new Rect(6 * scrW, 4 * scrH, 4 * scrW, scrH), "Resume"))
             {
-                SceneManager.LoadScene(1);
+                
             }
             if (GUI.Button(new Rect(6 * scrW, 5 * scrH, 4 * scrW, scrH), "Options"))
             {
                 showOptions = true;
             }
-            if (GUI.Button(new Rect(6 * scrW, 6 * scrH, 4 * scrW, scrH), "Exit"))
+            if (GUI.Button(new Rect(6 * scrW, 6 * scrH, 4 * scrW, scrH), "Main Menu"))
             {
-                Application.Quit();
+                SceneManager.LoadScene(0);
             }
         }
         if (showOptions)//if we are in options
@@ -118,7 +123,7 @@ public class Menu : MonoBehaviour
             #endregion
             #region Resolution and Screen
             i++;
-            
+
             if (GUI.Button(new Rect(0.5f * scrW, 3 * scrH + (i * 0.75f * scrH), 1.5f * scrW, 0.5f * scrH), "Resolutions"))
             {
                 showRes = !showRes;
@@ -148,7 +153,7 @@ public class Menu : MonoBehaviour
             #endregion
 
         }
-           
+
     }
 
     bool ToggleVolume()
@@ -183,5 +188,42 @@ public class Menu : MonoBehaviour
             Screen.fullScreen = true;
             return true;
         }
-    }   
+    }
+
+    public bool TogglePause()
+    {
+        if (pause)
+        {
+            if (!showOptions)
+            {
+                Time.timeScale = 1;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                menu.SetActive(false);
+                pause = false;
+            }
+            else
+            {
+                showOptions = false;
+                options.SetActive(false);
+                menu.SetActive(true);
+            }
+            return false;
+        }
+        else
+        {
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            pause = true;
+            menu.SetActive(true);
+            return true;
+        }
+    }
+
+    public void ReturnGame()
+    {
+        TogglePause();
+    }
+
 }
