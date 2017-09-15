@@ -31,7 +31,11 @@ public class Menu : MonoBehaviour
     public float volumeSlider, holdingVolume;
     public bool muteToggle;
     public Light brightness;
-    public float brightnessSlider;    
+    public float brightnessSlider;
+
+    [Header("Art")]
+    public GUISkin menuSkin;
+    public GUIStyle boxStyle;
 
     void Start()
     {
@@ -69,10 +73,12 @@ public class Menu : MonoBehaviour
 
     void OnGUI()
     {
+        GUI.skin = menuSkin;
+
         if (!showOptions)//if we are on our menu
-        {
-            GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");//background box
-            GUI.Box(new Rect(4 * scrW, 0.25f * scrH, 8 * scrW, 2 * scrH), "Jaymies Game Of Awesome");//Title
+        {            
+            GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "", boxStyle);//background
+            GUI.Label(new Rect(4 * scrW, 0.25f * scrH, 8 * scrW, 2 * scrH), "Anshu's Secret Screen");//Title
             //Buttons
             if (GUI.Button(new Rect(6 * scrW, 4 * scrH, 4 * scrW, scrH), "Play"))
             {
@@ -86,13 +92,15 @@ public class Menu : MonoBehaviour
             {
                 Application.Quit();
             }
+            GUI.skin = null;
         }
         if (showOptions)//if we are in options
         {
-            if (scrW != Screen.width / 16 || scrH != Screen.height / 9)
+            if (scrW != Screen.width / 16 || scrH != Screen.height / 9) // if screen was not already in 16:9 ratio...
             {
                 scrW = Screen.width / 16;
                 scrH = Screen.height / 9;
+                // ... it certainly is now
             }
             if (GUI.Button(new Rect(14.5f * scrW, 8f * scrH, 1.5f * scrW, .75f * scrH), "Back")) // Back button
             {
@@ -100,11 +108,12 @@ public class Menu : MonoBehaviour
             }
 
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");//background box
+            
             #region Audio and Brightness
             int i = 0;
-            GUI.Box(new Rect(4 * scrW, 0.25f * scrH, 8 * scrW, 2 * scrH), "Options");//Title
+            GUI.Label(new Rect(4 * scrW, 0.25f * scrH, 8 * scrW, 2 * scrH), "Options");//Title
 
-            GUI.Box(new Rect(0.5f * scrW, 3 * scrH + (i * 0.75f * scrH), 1.5f * scrW, 0.75f * scrH), "Volume");
+            GUI.Box(new Rect(0.5f * scrW, 3 * scrH + (i * 0.75f * scrH), 1.5f * scrW, 0.5f * scrH), "Volume");
             volumeSlider = GUI.HorizontalSlider(new Rect(2 * scrW, 3.25f * scrH + (i * 0.75f * scrH), 2f * scrW, 0.25f * scrH), volumeSlider, 0, 1);
 
             if (GUI.Button(new Rect(4.25f * scrW, 3 * scrH + (i * (scrH * 0.5f)), 1f * scrW, 0.5f * scrH), "Mute")) // Label
@@ -113,7 +122,7 @@ public class Menu : MonoBehaviour
             }
 
             i++;
-            GUI.Box(new Rect(0.5f * scrW, 3 * scrH + (i * 0.75f * scrH), 1.5f * scrW, 0.75f * scrH), "Brightness");
+            GUI.Box(new Rect(0.5f * scrW, 3 * scrH + (i * 0.75f * scrH), 1.5f * scrW, 0.5f * scrH), "Brightness");
             brightnessSlider = GUI.HorizontalSlider(new Rect(2 * scrW, 3.25f * scrH + (i * 0.75f * scrH), 2f * scrW, 0.25f * scrH), brightnessSlider, 0, 1);
             #endregion
             #region Resolution and Screen
@@ -147,8 +156,12 @@ public class Menu : MonoBehaviour
             }
             #endregion
 
+            #region Player Controls
+
+            GUI.Button(new Rect(10f * scrW, 1 * scrH + (i * (scrH * 0.5f)), 1.5f * scrW, 0.5f * scrH), "Controls");
+            #endregion
         }
-           
+
     }
 
     bool ToggleVolume()

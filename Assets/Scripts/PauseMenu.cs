@@ -199,14 +199,14 @@ public class PauseMenu : MonoBehaviour {
                 Time.timeScale = 1;
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
-                menu.SetActive(false);
+                //menu.SetActive(false);
                 pause = false;
             }
             else
             {
                 showOptions = false;
-                options.SetActive(false);
-                menu.SetActive(true);
+                //options.SetActive(false);
+                //menu.SetActive(true);
             }
             return false;
         }
@@ -216,7 +216,7 @@ public class PauseMenu : MonoBehaviour {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             pause = true;
-            menu.SetActive(true);
+            //menu.SetActive(true);
             return true;
         }
     }
