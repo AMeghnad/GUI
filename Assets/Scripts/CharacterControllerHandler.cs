@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CharacterHandler : MonoBehaviour
+public class CharacterControllerHandler : MonoBehaviour
 {
 
     public bool dead;

@@ -27,12 +27,12 @@ public class GUI_Manager : MonoBehaviour
     [Header("Resolutions")]
     public int index;
     public int[] resX, resY;
-    public CharacterHandler HUD;   
+    public CharacterControllerHandler HUD;   
 
     // Initialisation
     void Start()
     {
-        HUD = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterHandler>();
+        HUD = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterControllerHandler>();
         // audio source safety check
         if (mainMusic != null && volumeSlider != null)
         {

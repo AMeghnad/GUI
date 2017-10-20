@@ -34,7 +34,7 @@ public class PauseMenu : MonoBehaviour {
     public bool muteToggle;
     public Light brightness;
     public float brightnessSlider;
-    public CharacterHandler HUD;
+    public CharacterControllerHandler HUD;
 
     // Use this for initialization
     void Start ()
