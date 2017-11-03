@@ -3,7 +3,7 @@ using System.Collections;
 //this script can be found in the Component section under the option Character Set Up 
 //Interact
 [AddComponentMenu("Character Set Up/Interact")]
-public class PickUp : MonoBehaviour 
+public class PickUp : MonoBehaviour
 {
     #region Variables
     //We are setting up these variable and the tags in update for week 3,4 and 5
@@ -15,10 +15,12 @@ public class PickUp : MonoBehaviour
     #region Start
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         //connect our player to the player variable via tag
         player = GameObject.FindGameObjectWithTag("Player");
         //connect our Camera to the mainCam variable via tag
-        mainCam = GameObject.FindGameObjectWithTag("MainCamera");
+        mainCam = this.gameObject;        
     }
     #endregion
     #region Update
@@ -35,13 +37,24 @@ public class PickUp : MonoBehaviour
             RaycastHit hitInfo;
             //if this physics raycast hits something within 10 units
             if (Physics.Raycast(interact, out hitInfo, 10))
-            {
+            {                
                 #region NPC tag
                 //and that hits info is tagged NPC
                 if (hitInfo.collider.CompareTag("NPC"))
                 {
                     //Debug that we hit a NPC
                     Debug.Log("Hit the NPC");
+                    Dialogue dlg = hitInfo.transform.GetComponent<Dialogue>();
+                    if(dlg != null)
+                    {
+                        Cursor.lockState = CursorLockMode.None;
+                        Cursor.visible = true;
+                        dlg.showDlg = true;
+                        player.GetComponent<MouseLook>().enabled = false;
+                        player.GetComponent<Movement>().enabled = false;
+                        mainCam.GetComponent<MouseLook>().enabled = false;
+                        
+                    }
                 }
                 #endregion
                 #region Item
@@ -52,10 +65,10 @@ public class PickUp : MonoBehaviour
                     Debug.Log("Hit an Item");
                     #endregion
                 }
-                }
+            }
         }
     }
-	#endregion
+    #endregion
 }
 
 
